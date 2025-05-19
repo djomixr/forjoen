@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>给你的<3</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #493131;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+        
+        header {
+            background-color: #6b1717;
+            color: rgb(255, 255, 255);
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            margin: 0;
+            font-size: 2.5em;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+        
+        .garden {
+            min-height: 500px;
+            background-color: #3d5d3d;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        
+        .controls {
+            background-color: rgb(211, 151, 151);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        button {
+            background-color: #7b1616;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #bc69a3;
+        }
+        
+        .flower {
+            position: absolute;
+            transition: transform 0.5s;
+            cursor: pointer;
+        }
+        
+        .flower:hover {
+            transform: scale(1.1);
+        }
+        
+        .counter {
+            font-size: 1.2em;
+            margin: 10px 0;
+        }
+        
+        footer {
+            background-color: #7e0000;
+            color: white;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Happy 520 Day, 李佳文 </h1>
+        <p>种你自己的花!</p>
+    </header>
+    
+    <div class="container">
+        <div class="controls">
+            <h2>选你的花</h2>
+            <button id="rose">Plant a Rose</button>
+            <button id="tulip">Plant a Tulip</button>
+            <button id="sunflower">Plant a Sunflower</button>
+            <button id="daisy">Plant a Daisy</button>
+            <button id="clear">Clear Garden</button>
+            <div class="counter">种植的花: <span id="flower-count">0</span></div>
+        </div>
+        
+        <div class="garden" id="garden"></div>
+    </div>
+    
+    <footer>
+        我爱你
+    </footer>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const garden = document.getElementById('garden');
+            const flowerCount = document.getElementById('flower-count');
+            let count = 0;
+            
+            // Flower creation functions
+            function createFlower(type, x, y) {
+                const flower = document.createElement('div');
+                flower.className = 'flower';
+                flower.style.left = `${x}px`;
+                flower.style.top = `${y}px`;
+                
+                let html = '';
+                let size = Math.floor(Math.random() * 30) + 30;
+                
+                switch(type) {
+                    case 'rose':
+                        html = `
+                            <svg width="${size}" height="${size}" viewBox="0 0 100 100">
+                                <!-- Stem (drawn first so it's underneath) -->
+                                <path d="M50,80 L50,60" stroke="#228B22" stroke-width="5"/>
+                                <path d="M50,60 L30,90" stroke="#228B22" stroke-width="4"/>
+                                <path d="M50,60 L70,90" stroke="#228B22" stroke-width="4"/>
+                                <!-- Flower (drawn after stem so it's on top) -->
+                                <circle cx="50" cy="50" r="20" fill="#FF1493"/>
+                                <circle cx="40" cy="40" r="10" fill="#FF69B4"/>
+                                <circle cx="60" cy="40" r="10" fill="#FF69B4"/>
+                                <circle cx="40" cy="60" r="10" fill="#FF69B4"/>
+                                <circle cx="60" cy="60" r="10" fill="#FF69B4"/>
+                            </svg>
+                        `;
+                        break;
+                    case 'tulip':
+                        html = `
+                            <svg width="${size}" height="${size}" viewBox="0 0 100 100">
+                                <!-- Stem -->
+                                <path d="M50,90 L50,60" stroke="#228B22" stroke-width="5"/>
+                                <!-- Flower -->
+                                <path d="M50,40 Q60,20 70,40 Q80,60 50,80 Q20,60 30,40 Q40,20 50,40 Z" fill="#FF6347"/>
+                            </svg>
+                        `;
+                        break;
+                    case 'sunflower':
+                        html = `
+                            <svg width="${size}" height="${size}" viewBox="0 0 100 100">
+                                <!-- Stem -->
+                                <path d="M50,90 L50,60" stroke="#228B22" stroke-width="5"/>
+                                <!-- Center -->
+                                <circle cx="50" cy="50" r="15" fill="#8B4513"/>
+                                <!-- Petals -->
+                                <path d="M50,20 L52,40" stroke="#FFD700" stroke-width="4" fill="#FFD700"/>
+                                <path d="M50,20 L48,40" stroke="#FFD700" stroke-width="4" fill="#FFD700"/>
+                                <path d="M80,50 L60,52" stroke="#FFD700" stroke-width="4" fill="#FFD700"/>
+                                <path d="M80,50 L60,48" stroke="#FFD700" stroke-width="4" fill="#FFD700"/>
+                                <path d="M50,80 L52,60" stroke="#FFD700" stroke-width="4" fill="#FFD700"/>
+                                <path d="M50,80 L48,60" stroke="#FFD700" stroke-width="4" fill="#FFD700"/>
+                                <path d="M20,50 L40,52" stroke="#FFD700" stroke-width="4" fill="#FFD700"/>
+                                <path d="M20,50 L40,48" stroke="#FFD700" stroke-width="4" fill="#FFD700"/>
+                                <path d="M30,30 L35,35" stroke="#FFD700" stroke-width="4" fill="#FFD700"/>
+                                <path d="M70,70 L65,65" stroke="#FFD700" stroke-width="4" fill="#FFD700"/>
+                                <path d="M30,70 L35,65" stroke="#FFD700" stroke-width="4" fill="#FFD700"/>
+                                <path d="M70,30 L65,35" stroke="#FFD700" stroke-width="4" fill="#FFD700"/>
+                            </svg>
+                        `;
+                        break;
+                    case 'daisy':
+                        html = `
+                            <svg width="${size}" height="${size}" viewBox="0 0 100 100">
+                                <!-- Stem -->
+                                <path d="M50,90 L50,60" stroke="#228B22" stroke-width="5"/>
+                                <!-- Center -->
+                                <circle cx="50" cy="50" r="10" fill="#FFFF00"/>
+                                <!-- Petals -->
+                                <path d="M50,30 L50,40" stroke="white" stroke-width="4"/>
+                                <path d="M50,70 L50,60" stroke="white" stroke-width="4"/>
+                                <path d="M30,50 L40,50" stroke="white" stroke-width="4"/>
+                                <path d="M70,50 L60,50" stroke="white" stroke-width="4"/>
+                                <path d="M35,35 L40,40" stroke="white" stroke-width="4"/>
+                                <path d="M65,65 L60,60" stroke="white" stroke-width="4"/>
+                                <path d="M35,65 L40,60" stroke="white" stroke-width="4"/>
+                                <path d="M65,35 L60,40" stroke="white" stroke-width="4"/>
+                            </svg>
+                        `;
+                        break;
+                }
+                
+                flower.innerHTML = html;
+                garden.appendChild(flower);
+                count++;
+                flowerCount.textContent = count;
+                
+                // Make flowers draggable
+                makeDraggable(flower);
+            }
+            
+            // Make elements draggable
+            function makeDraggable(element) {
+                let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+                
+                element.onmousedown = dragMouseDown;
+                
+                function dragMouseDown(e) {
+                    e = e || window.event;
+                    e.preventDefault();
+                    pos3 = e.clientX;
+                    pos4 = e.clientY;
+                    document.onmouseup = closeDragElement;
+                    document.onmousemove = elementDrag;
+                }
+                
+                function elementDrag(e) {
+                    e = e || window.event;
+                    e.preventDefault();
+                    pos1 = pos3 - e.clientX;
+                    pos2 = pos4 - e.clientY;
+                    pos3 = e.clientX;
+                    pos4 = e.clientY;
+                    element.style.top = (element.offsetTop - pos2) + "px";
+                    element.style.left = (element.offsetLeft - pos1) + "px";
+                }
+                
+                function closeDragElement() {
+                    document.onmouseup = null;
+                    document.onmousemove = null;
+                }
+            }
+            
+            // Event listeners for buttons
+            document.getElementById('rose').addEventListener('click', function() {
+                const rect = garden.getBoundingClientRect();
+                const x = Math.random() * (rect.width - 50);
+                const y = Math.random() * (rect.height - 50);
+                createFlower('rose', x, y);
+            });
+            
+            document.getElementById('tulip').addEventListener('click', function() {
+                const rect = garden.getBoundingClientRect();
+                const x = Math.random() * (rect.width - 50);
+                const y = Math.random() * (rect.height - 50);
+                createFlower('tulip', x, y);
+            });
+            
+            document.getElementById('sunflower').addEventListener('click', function() {
+                const rect = garden.getBoundingClientRect();
+                const x = Math.random() * (rect.width - 50);
+                const y = Math.random() * (rect.height - 50);
+                createFlower('sunflower', x, y);
+            });
+            
+            document.getElementById('daisy').addEventListener('click', function() {
+                const rect = garden.getBoundingClientRect();
+                const x = Math.random() * (rect.width - 50);
+                const y = Math.random() * (rect.height - 50);
+                createFlower('daisy', x, y);
+            });
+            
+            document.getElementById('clear').addEventListener('click', function() {
+                garden.innerHTML = '';
+                count = 0;
+                flowerCount.textContent = count;
+            });
+            
+            // Plant a flower on click anywhere in the garden
+            garden.addEventListener('click', function(e) {
+                if (e.target === garden) {
+                    const types = ['rose', 'tulip', 'sunflower', 'daisy'];
+                    const randomType = types[Math.floor(Math.random() * types.length)];
+                    createFlower(randomType, e.offsetX, e.offsetY);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
